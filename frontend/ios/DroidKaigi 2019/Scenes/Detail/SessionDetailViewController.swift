@@ -128,7 +128,7 @@ extension SessionDetailViewController: UITableViewDataSource {
         return sections.count
     }
 
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch sections[section] {
         case .speakers:
             return (session as? SpeechSession)?.speakers.count ?? 0
