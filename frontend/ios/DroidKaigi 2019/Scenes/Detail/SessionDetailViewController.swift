@@ -88,6 +88,35 @@ class SessionDetailViewController: UIViewController {
     }
 }
 
+private extension SessionDetailViewController {
+    func openActionSheet(forSpeaker speaker: Speaker) {
+        let actionSheet = UIAlertController(title: nil,
+                                            message: nil,
+                                            preferredStyle: .actionSheet)
+        if let twitterURL = speaker.twitterUrl.flatMap(URL.init),
+            UIApplication.shared.canOpenURL(twitterURL) {
+            actionSheet.addAction(UIAlertAction(title: "Twitter", style: .default) { _ in
+                UIApplication.shared.open(twitterURL, options: [:], completionHandler: nil)
+            })
+        }
+        if let githubURL = speaker.githubUrl.flatMap(URL.init),
+            UIApplication.shared.canOpenURL(githubURL) {
+            actionSheet.addAction(UIAlertAction(title: "GitHub", style: .default) { _ in
+                UIApplication.shared.open(githubURL, options: [:], completionHandler: nil)
+            })
+        }
+        if let blogURL = speaker.blogUrl.flatMap(URL.init),
+            UIApplication.shared.canOpenURL(blogURL) {
+            actionSheet.addAction(UIAlertAction(title: "Blog", style: .default) { _ in
+                UIApplication.shared.open(blogURL, options: [:], completionHandler: nil)
+            })
+        }
+        if actionSheet.actions.isEmpty { return }
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(actionSheet, animated: true)
+    }
+}
+
 extension SessionDetailViewController: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
