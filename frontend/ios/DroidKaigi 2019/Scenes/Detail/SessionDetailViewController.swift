@@ -32,7 +32,7 @@ class SessionDetailViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 50, right: 0)
         tableView.separatorStyle = .none
-        tableView.allowsSelection = false
+        tableView.allowsSelection = true
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(SessionDetailTagsTableViewCell.self)
@@ -114,6 +114,11 @@ private extension SessionDetailViewController {
         if actionSheet.actions.isEmpty { return }
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(actionSheet, animated: true)
+    }
+    
+    func openLink(ofDocument document: Document) {
+        // TODO: Link for video or slide
+        print(document)
     }
 }
 
@@ -219,5 +224,17 @@ extension SessionDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if sections.indices.last == section { return .leastNonzeroMagnitude }
         return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let cell = tableView.cellForRow(at: indexPath) as? SessionDetailWithIconTableViewCell,
+            let cellType = cell.cellType else { return }
+        switch cellType {
+        case let .document(document):
+            openLink(ofDocument: document)
+        case let .speaker(speaker):
+            openActionSheet(forSpeaker: speaker)
+        }
     }
 }
